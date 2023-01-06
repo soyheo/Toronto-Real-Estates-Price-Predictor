@@ -1,16 +1,29 @@
-# import psycopg2
+import psycopg2
 import pandas as pd
 # from sqlalchemy import create_engine
 # import seaborn as sns
 from sklearn.model_selection import train_test_split
 import numpy as np
-'''
+from xgboost import XGBRegressor
+from sklearn.preprocessing import PowerTransformer
+from category_encoders import OrdinalEncoder, OneHotEncoder
+from sklearn.compose import TransformedTargetRegressor
+from sklearn.pipeline import make_pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.model_selection import cross_val_score
+import joblib
+import pickle
+
 conn = psycopg2.connect("host=localhost dbname=project user=postgres password=5846 port=5432")
 cur = conn.cursor()
-# cur.execute("SELECT * FROM building")
-# data_building = cur.fetchall()
-# print(data_building)
+cur.execute("""SELECT * FROM building b 
+JOIN property p USING (id)""")
+json_data = cur.fetchall()
+df = pd.DataFrame(json_data)
+df.columns = ['id', 'bathroomtotal', 'bedrooms', 'type_x', 'ammenities', 'price', 'type_y', 'addresstext', 'longitude', 'latitude', 'parkingspacetotal', 'parkingtype', 'ownershiptype', 'ammenitiesnearby']
+# print(df)
 
+'''
 # engine = create_engine('postgresql://postgres:5846@localhost:812/project')
 # conn = engine.connect()
 data_building = pd.read_sql("SELECT * FROM building", con=conn)
@@ -20,7 +33,7 @@ print(df)
 df.to_csv('real_estate_listing', index = False)
 conn.close()
 '''
-df = pd.read_csv(".\\database\\real_estate_listing")
+# df = pd.read_csv(".\\database\\real_estate_listing")
 # print(df)
 # type_y의 Vacant Land와 Parkining 삭제
 df = df.drop(df[(df.type_y == 'Vacant Land') | (df.type_y == 'Parking')].index)
@@ -31,7 +44,7 @@ df[df.bedrooms.isnull()]
 df = df.drop(df[df.bedrooms.isnull()].index)
 # 컬럼 데이터 타입 및 이름 변경
 df.bathroomtotal = df.bathroomtotal.astype('int')
-df.price = df.price.str.replace(',', '').str.replace('$', '').astype('float')
+df.price = df.price.astype('float')
 df.rename(columns={'type_x':'type'}, inplace=True)
 
 # 데이터 분리 for modeling
@@ -60,15 +73,6 @@ y_train = train[target]
 X_test = test[features]
 y_test = test[target]
 # Gradient Boosting 모델 분석
-from xgboost import XGBRegressor
-from sklearn.preprocessing import PowerTransformer
-from category_encoders import OrdinalEncoder, OneHotEncoder
-from sklearn.compose import TransformedTargetRegressor
-from sklearn.pipeline import make_pipeline
-from sklearn.impute import SimpleImputer
-from sklearn.model_selection import cross_val_score
-import joblib
-
 
 boosting = XGBRegressor(
     n_estimators=2000,
@@ -95,10 +99,10 @@ model.fit(X_train, y_train)
 
 
 # 모델 부호화
-# import pickle
 
-# with open('model.pkl','wb') as pickle_file:
-    # pickle.dump(model, pickle_file)
+
+with open('model.pkl','wb') as pickle_file:
+    pickle.dump(model, pickle_file)
 
 
 

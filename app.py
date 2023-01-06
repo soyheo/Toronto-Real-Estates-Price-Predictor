@@ -4,8 +4,8 @@ import joblib
 import pandas as pd
 import psycopg2
 import requests
-import json
-from apscheduler.schedulers.background import BackgroundScheduler
+# import json
+# from apscheduler.schedulers.background import BackgroundScheduler
 import apscheduler
 
 app = Flask(__name__)

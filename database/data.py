@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 import json
 from pymongo import MongoClient
 import time
-
+from selenium import webdriver
+from selenium.webdriver import ActionChains
 
 HOST = 'cluster1.leos9pf.mongodb.net'
 USER = 'soyheo'
@@ -12,8 +13,15 @@ PASSWORD = 'soyheo1234'
 DATABASE_NAME = 'Project'
 COLLECTION_NAME = 'realtor_api'
 MONGO_URI = f"mongodb+srv://{USER}:{PASSWORD}@{HOST}/{DATABASE_NAME}?retryWrites=true&w=majority"
+'''
+dr = webdriver.Chrome()
+dr.get('https://www.realtor.ca/')
 
+act = ActionChains(dr)
 
+ele1 = dr.find_element_by_id('homeSearchTxt')   
+act.send_keys_to_element('ele1', 'toronto')
+'''
 for page_num in range(501):
 
     cookies = {
@@ -86,11 +94,11 @@ for page_num in range(501):
         
 
         
-    client = MongoClient(MONGO_URI)
-    db = client[DATABASE_NAME]
-    coll = db[COLLECTION_NAME]
+    # client = MongoClient(MONGO_URI)
+    # db = client[DATABASE_NAME]
+    # coll = db[COLLECTION_NAME]
 
-    coll.insert_many(result)
+    # coll.insert_many(result)
     
 
 
