@@ -1,16 +1,11 @@
 from flask import Flask, render_template, request, jsonify
-import pickle
+# import pickle
 import joblib
 import pandas as pd
 import psycopg2
-import requests
-# import json
-# from apscheduler.schedulers.background import BackgroundScheduler
-import apscheduler
+
 
 app = Flask(__name__)
-# scheduler = apscheduler()
-# scheduler.init_app(app)
 
 
 @app.route('/')
