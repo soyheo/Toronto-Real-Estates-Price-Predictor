@@ -35,36 +35,23 @@ conn.close()
 '''
 # df = pd.read_csv(".\\database\\real_estate_listing")
 # print(df)
-# type_y의 Vacant Land와 Parkining 삭제
+# Delete type_y의 Vacant Land & Parkining
 df = df.drop(df[(df.type_y == 'Vacant Land') | (df.type_y == 'Parking')].index)
-# type_y 칼럼 전체 삭제
+# Delete type_y column
 df = df.drop(['type_y'], axis=1)
-# bedrooms 결측값 확인 및 삭제
+# Delete the null value of bedrooms
 df[df.bedrooms.isnull()]
 df = df.drop(df[df.bedrooms.isnull()].index)
-# 컬럼 데이터 타입 및 이름 변경
+# Refactor column data
 df.bathroomtotal = df.bathroomtotal.astype('int')
 df.price = df.price.astype('float')
 df.rename(columns={'type_x':'type'}, inplace=True)
 
-# 데이터 분리 for modeling
-
+# Select the final model for API operation
+# Data division for modeling
 train, test = train_test_split(df, train_size=0.80, test_size=0.20, random_state=2)
 train.shape, test.shape
 # train, val = train_test_split(train, train_size=0.80, test_size=0.20, random_state=2)
-
-
-target = 'price'
-features = ['bathroomtotal', 'parkingspacetotal', 'longitude', 'latitude', 'type']
-X_train = train[features]
-y_train = train[target]
-X_test = test[features]
-y_test = test[target]
-
-# API 구동을 위한 최종모델 선정
-# 데이터 분리 for modeling
-train, test = train_test_split(df, train_size=0.80, test_size=0.20, random_state=2)
-train.shape, test.shape
 
 target = 'price'
 features = ['bathroomtotal', 'parkingspacetotal', 'longitude', 'latitude']
@@ -72,8 +59,8 @@ X_train = train[features]
 y_train = train[target]
 X_test = test[features]
 y_test = test[target]
-# Gradient Boosting 모델 분석
 
+# Gradient Boosting Model
 boosting = XGBRegressor(
     n_estimators=2000,
     objective='reg:squarederror', # default
@@ -98,9 +85,7 @@ model.fit(X_train, y_train)
 # print(model.predict(df_test))
 
 
-# 모델 부호화
-
-
+# Pickle the model
 with open('model.pkl','wb') as pickle_file:
     pickle.dump(model, pickle_file)
 

@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     '''
-    # APScheduler 사용 
+    # Using APScheduler
     url = "https://api.apilayer.com/currency_data/live"
 
     payload = {}
