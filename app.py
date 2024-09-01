@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, jsonify
 import joblib
 import pandas as pd
 import psycopg2
-
+import os
 
 app = Flask(__name__)
 
@@ -54,7 +54,7 @@ def web_mars_get():
 
 
 if __name__ == '__main__':
-    model = joblib.load('./model.pkl')
+    model = joblib.load(os.getcwd() + './model.pkl')
     app.run('0.0.0.0', port=5000, debug=True)
 
 
