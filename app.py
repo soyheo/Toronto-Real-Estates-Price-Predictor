@@ -55,6 +55,6 @@ def web_mars_get():
 
 if __name__ == '__main__':
     model = joblib.load(os.getcwd() + './model.pkl')
-    app.run('0.0.0.0', port=5000, debug=True)
+    # app.run('0.0.0.0', port=5000, debug=True)
 
 
