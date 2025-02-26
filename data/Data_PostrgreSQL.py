@@ -2,18 +2,21 @@ import psycopg2
 from pymongo import MongoClient
 import sqlite3
 import json
+from dotenv import load_dotenv
+import os
 
 # MongoDB data retrieving
-HOST = 'cluster1.leos9pf.mongodb.net'
-USER = 'soyheo'
-PASSWORD = 'soyheo1234'
-DATABASE_NAME = 'Project'
-COLLECTION_NAME = 'realtor_api'
-MONGO_URI = f"mongodb+srv://{USER}:{PASSWORD}@{HOST}/{DATABASE_NAME}?retryWrites=true&w=majority"
+load_dotenv()
+host = os.getenv('HOST')
+user = os.getenv('USER')
+password = os.getenv('PASSWORD')
+db_name = os.getenv('DATABASE_NAME')
+col_name = os.getenv('COLLECTION_NAME')
+mongo_uri = f"mongodb+srv://{user}:{password}@{host}/{db_name}?retryWrites=true&w=majority"
 
-client = MongoClient(MONGO_URI)
-db = client[DATABASE_NAME]
-coll = db[COLLECTION_NAME]
+client = MongoClient(mongo_uri)
+db = client[db_name]
+coll = db[col_name]
 docs = coll.find({}, {'_id':False})
 
 listing_list = []
@@ -56,7 +59,13 @@ for i in range(1, len(docs)):
 
 
 # Connect to postgresql db
-conn = psycopg2.connect("host=localhost dbname=project user=postgres password=5846 port=5432")
+host=os.getenv("PG_host")
+dbname=os.getenv("PG_dbname")
+user=os.getenv("PG_user")
+password=os.getenv("PG_password")
+port=os.getenv("PG_port")
+
+conn = psycopg2.connect(f"host={host} dbname={dbname} user={user} password={password} port={port}")
 cur = conn.cursor()
 
 

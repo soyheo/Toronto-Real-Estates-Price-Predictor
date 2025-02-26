@@ -6,14 +6,17 @@ from pymongo import MongoClient
 import time
 from selenium import webdriver
 from selenium.webdriver import ActionChains
+from dotenv import load_dotenv
+import os
 
-HOST = 'cluster1.leos9pf.mongodb.net'
-USER = 'soyheo'
-PASSWORD = 'soyheo1234'
-DATABASE_NAME = 'Project'
-COLLECTION_NAME = 'realtor_api'
-MONGO_URI = f"mongodb+srv://{USER}:{PASSWORD}@{HOST}/{DATABASE_NAME}?retryWrites=true&w=majority"
-
+# MongoDB data retrieving
+load_dotenv()
+host = os.getenv('HOST')
+user = os.getenv('USER')
+password = os.getenv('PASSWORD')
+db_name = os.getenv('DATABASE_NAME')
+col_name = os.getenv('COLLECTION_NAME')
+mongo_uri = f"mongodb+srv://{user}:{password}@{host}/{db_name}?retryWrites=true&w=majority"
 '''
 # Web Crowling
 dr = webdriver.Chrome()
