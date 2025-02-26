@@ -1,5 +1,21 @@
+// {
+//     "rewrites": [
+//       { "source": "/(.*)", "destination": "/templates/index.html" }
+//     ]
+// }
+
 {
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/templates/index.html" }
-    ]
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
+    }
+  ]
 }
