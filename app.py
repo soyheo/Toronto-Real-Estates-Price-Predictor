@@ -6,6 +6,7 @@ import psycopg2
 import os
 
 app = Flask(__name__)
+model = joblib.load(os.getcwd() + '/model.pkl')
 
 
 @app.route('/')
@@ -53,8 +54,8 @@ def web_mars_get():
 
 
 
-if __name__ == '__main__':
-    model = joblib.load(os.getcwd() + './model.pkl')
+# if __name__ == '__main__':
+    # model = joblib.load(os.getcwd() + '/model.pkl')
     # app.run('0.0.0.0', port=5000, debug=True)
 
 
